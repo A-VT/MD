@@ -1,35 +1,31 @@
-from indeed import IndeedClient
-#import MySQL Python Library
-import pymysql
+import requests
+from careerjet_api_client import CareerjetAPIClient
 
 
+cj  =  CareerjetAPIClient("en_GB");
 
-clientIndeed = IndeedClient(publisher = ************3506)
-parameters_Indeed = {'q' : "python developer",
-              'l' : "Austin",
-              'sort' : "date",
-              'fromage' : "5",
-              'limit' : "25",
-              'filter' : "1",
-              'userip' : "192.186.176.550:60409",
-              'useragent' : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2)"
-             }
+indeed_api_key = 'd1qQ1qZJb4hjSYcumJR3MDbcrTEqErPO5aPLqwZjqv6Rgg5efiQeTCRxspdQk8yC'
+indeed_keywords = 'data scientist'
+indeed_location = 'portugal'
 
+indeed_url = f'https://public.api.careerjet.net/search?apikey={api_key}&keywords={query}&location={location}&sort=salary'
 
-#our main function
-def get_offers(params):
+#response = requests.get(indeed_url)
+#indeed_data = response.json()
+#print(indeed_data)
 
-    search_results = clientIndeed.search(**search_params)
+careerjet_query = {
+                        'location'    : indeed_location,
+                        'keywords'    : indeed_keywords,
+                        'affid'       : '0db138870e02f87744edfc80882408a8',
+                        'user_ip'     : '0.0.0.0',
+                        'url'         : f'http://www.example.com/jobsearch?q={indeed_keywords}&l={indeed_location}',
+                        'user_agent'  : 'Mozilla/125.0.3 Gecko/20100101 Firefox/31.0'
+                    }
+try:
+    careerjet_result_json = cj.search(careerjet_query);
+except Exception as e:
+    print(e)
 
-    for elm in search_results['results']:
-                
-        offer = (elm['jobtitle'], 
-                 elm['formattedLocation'], 
-                 elm['snippet'], 
-                 elm['url'], 
-                 elm['indeedApply'], 
-                 elm['jobkey'], 
-                 elm['date'])
+print(careerjet_result_json)
 
-
-get_offers(parameters_Indeed)
