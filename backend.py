@@ -85,13 +85,12 @@ He holds a PhD in Computer Science from Stanford University.
 Previously, he worked at Google in California.
 """
 
-# Extract qualifications and locations from text
-qualifications, locations = extract_info(text)
-
-# Search for job listings based on qualifications and location
-for location in locations:
-    job_listings = search_job_listings(qualifications, location)
-    print(f"Job listings in {location}:")
-    for job in job_listings['jobs']:
-        print(job['title'], "-", job['company'], "-", job['salary'], "-", job['locations'])
-    print()
+def getMeSomeJuicyAnswers(text):
+    qualifications, locations = extract_info(text)
+    for location in locations:
+        job_listings = search_job_listings(qualifications, location)
+        print(f"Job listings in {location}:")
+        for job in job_listings['jobs']:
+            results = [job['title'], job['company'], job['salary'], job['locations']]
+            #print(job['title'], "-", job['company'], "-", job['salary'], "-", job['locations'])
+    return results

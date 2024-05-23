@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify
+import backend
 
 app = Flask(__name__)
 
@@ -14,7 +15,11 @@ def open_input_text():
 def handle_input():
     data = request.json
     text = data['text']
+    results = backend.getMeSomeJuicyAnswers(text)
+
     print(f"text: {text}")
+    print(f"results: {results}")
+
     return jsonify({'status': 'success', 'text': text})
 
 @app.route('/CVprocessing')
