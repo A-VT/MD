@@ -1,0 +1,23 @@
+/* Style for input container */
+#input-container {
+    position: fixed;
+    bottom: 0;
+    left: 200px;
+    width: calc(100% - 200px); /* Adjust width to accommodate sidebar */
+    background-color: #f4f4f4;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    z-index: 999; /* Ensure the input container is above the sidebar */
+}
+
+#input-text {
+    width: calc(100% - 100px); /* Adjust width of text box */
+    height: 100px; /* Initial height of text box */
+    margin-right: 10px;
+    resize: vertical; /* Allow vertical resizing */
+}
+
+#send-button {
+    cursor: pointer;
+}
