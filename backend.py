@@ -78,19 +78,32 @@ def search_job_listings(qualifications, location):
 
     return data
 
+def getMeSomeJuicyAnswers(text):
+    results = []
+    qualifications, locations = extract_info(text)
+    for location in locations:
+        job_listings = search_job_listings(qualifications, location)
+        print(f"Job listings in {location}:")
+        
+        results = job_listings['jobs']
+        
+
+        #for job in job_listings['jobs']:
+        #    results.append([job['title'], job['company'], job['salary'], job['locations']])
+        #    #print(job['title'], "-", job['company'], "-", job['salary'], "-", job['locations'])
+    
+    #for debug purposes - delete later
+    with open("./resultsDump.juson", "w") as json_file:
+        json.dump(results, json_file)
+
+    return results
+
+
+
 # Example text
 text = """
 Dr. John Smith is a senior researcher in Artificial Intelligence at MIT. 
 He holds a PhD in Computer Science from Stanford University. 
 Previously, he worked at Google in California.
 """
-
-def getMeSomeJuicyAnswers(text):
-    qualifications, locations = extract_info(text)
-    for location in locations:
-        job_listings = search_job_listings(qualifications, location)
-        print(f"Job listings in {location}:")
-        for job in job_listings['jobs']:
-            results = [job['title'], job['company'], job['salary'], job['locations']]
-            #print(job['title'], "-", job['company'], "-", job['salary'], "-", job['locations'])
-    return results
+getMeSomeJuicyAnswers(text)

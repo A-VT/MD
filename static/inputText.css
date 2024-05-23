@@ -21,3 +21,7 @@
 #send-button {
     cursor: pointer;
 }
+
+.jobListing {
+    padding: 10px;
+}

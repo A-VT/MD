@@ -14,35 +14,21 @@
     <div class="content">
         <div id="toggle-btn">☰</div>
         <h1>Open Input Text</h1>
-        <p>This is the Open Input Text page.</p>
+
+        <b></b><div id="messageServer">Let's get you that dream job!</div></b>
+        <div id="responses"></div>
+
         <div id="input-container">
             <textarea id="input-text" placeholder="Enter text"></textarea>
             <button id="send-button">➡️</button>
-        </div>        
+        </div>
+
     </div>
 
     <script src="{{ url_for('static', filename='sidebar.js') }}"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const sendButton = document.getElementById("send-button");
-            const inputText = document.getElementById("input-text");
+    <script src="{{ url_for('static', filename='textInput.js') }}"></script>
 
-            sendButton.addEventListener("click", function () {
-                const text = inputText.value;
-                fetch('/handle_input', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ text: text }),
-                }).then(response => {
-                    // Handle response as needed
-                    console.log(response);
-                }).catch(error => {
-                    console.error('Error:', error);
-                });
-            });
-        });
-    </script>
+
+    
 </body>
 </html>

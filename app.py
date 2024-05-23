@@ -20,7 +20,7 @@ def handle_input():
     print(f"text: {text}")
     print(f"results: {results}")
 
-    return jsonify({'status': 'success', 'text': text})
+    return jsonify({'status': 'success', 'results': results})
 
 @app.route('/CVprocessing')
 def cv_processing():
