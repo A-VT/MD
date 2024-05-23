@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
+</head>
+<body>
+    <div class="sidebar">
+        {% include 'sidebar.html' %}
+    </div>
+    <div class="content">
+        <div id="toggle-btn">☰</div>
+        This is the index page of our app.
+    </div>
+    <script src="{{ url_for('static', filename='sidebar.js') }}"></script>
+</body>
+</html>

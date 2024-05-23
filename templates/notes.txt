@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--<link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">-->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Flask</title>
+</head>
+<body>
+
+    <div class="sidebar">
+        {% include 'sidebar.html' %}
+    </div>
+
+    <div class="content">
+        <div id="toggle-btn">☰</div>
+        <h1>Welcome to Flask!</h1>
+        <p>This is the default index page.</p>
+        <ul>
+            <li><a href="/openInputText">Open Input Text</a></li>
+            <li><a href="/CVprocessing">CV Processing</a></li>
+        </ul>
+        
+        <script src="{{ url_for('static', filename='sidebar.js') }}"></script>
+    </div>
+</body>
+</html>

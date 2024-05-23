@@ -1,0 +1,67 @@
+body {
+    display: flex;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #f4f4f4;
+    padding: 15px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    transition: width 0.3s ease;
+    overflow: hidden;
+    height: 100vh; /* Stretch sidebar to full viewport height */
+}
+
+.sidebar.collapsed {
+    width: 50px; /* Adjust this width to make it narrower */
+}
+
+.sidebar-content {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar.collapsed .sidebar-content {
+    opacity: 0;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 10px;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+}
+
+.content.collapsed {
+    margin-left: 50px; /* Adjust this margin to match the collapsed sidebar width */
+}
+
+#toggle-btn {
+    cursor: pointer;
+    position: absolute;
+    top: 15px;
+    left: 190px; /* Adjust this left position */
+    transition: left 0.3s ease;
+    font-size: 24px; /* Increase font size */
+    padding: 5px 10px; /* Add padding for larger clickable area */
+}
+
+#toggle-btn.collapsed {
+    left: 20px; /* Adjust this left position */
+}
