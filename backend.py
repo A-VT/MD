@@ -110,12 +110,32 @@ def getMeSomeJuicyAnswers(text):
         
 
         print(f"clean_locations {clean_locations}|skillsPlus {skillsPlus}\n\n")
-        for skil in skillsPlus:
-            for loc in clean_locations:
-                job_listings = search_job_listings(skil, loc)
 
-        for list_ in job_listings:
-            print(f"list {list_}")
+        listings = []
+        for skil in skillsPlus:
+            if clean_locations != []:
+                for loc in clean_locations:
+                    job_listings = search_job_listings(skil, loc)
+            else:
+                job_listings = search_job_listings(skil, "")
+
+            if "jobs" in job_listings:
+                listings.append(job_listings["jobs"])
+
+        print(listings)
+
+
+        lst_set = set()
+        for answer in listings:
+            for list_ in answer:
+                res__ = list_['title'] + "_" + list_['company'] + "_" + list_['salary'] + "_" + list_['locations']
+                if res__ not in lst_set:
+                    results_.append([list_['title'], list_['company'], list_['salary'], list_['locations']])
+                    lst_set.add(res__)
+
+        #for list_ in job_listings:
+        #    if list_ == "jobs":
+        #        print(f"list {list_}")
 
         #for location in resultLLM.locations:
         #    for skil in skillsPlus:
@@ -133,8 +153,8 @@ def getMeSomeJuicyAnswers(text):
         #            #    #print(job['title'], "-", job['company'], "-", job['salary'], "-", job['locations'])
 
     # For debug purposes - delete later
-    #with open("./resultsDump.json", "w") as json_file:
-    #    json.dump(results_.dict(), json_file)  # Save the result as a JSON object
+    with open("./resultsDump.json", "w") as json_file:
+        json.dump(results_, json_file)  # results_.dict()
 
     return results_
     #return result
