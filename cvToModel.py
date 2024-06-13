@@ -1,6 +1,6 @@
 import fitz  # PyMuPDF
 import re
-from backend import getMeSomeJuicyAnswers
+from MD.old_backend import getMeSomeJuicyAnswers
 
 def extract_text_from_pdf(pdf_path):
     text = ""

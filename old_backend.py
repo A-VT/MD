@@ -2,7 +2,6 @@ import re
 import requests
 import json
 from typing import Optional
-from locations import is_country_or_location
 
 from langchain_core.pydantic_v1 import BaseModel, Field
 from langchain_together import ChatTogether
@@ -11,6 +10,7 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 # environment variables
 import os 
 from dotenv import load_dotenv
+
 import fitz  # PyMuPDF
 
 # Load the pre-trained model and tokenizer
@@ -35,8 +35,8 @@ class Person(BaseModel):
     # Having a good description can help improve extraction results.
     name: Optional[str] = Field(default=None, description="The name of the person")
     skills: Optional[list] = Field(default=None, description="The hard/soft skills acquired by the candidate")
-    experiences: Optional[list] = Field(default=None, description="Level of experience in a particular field")
-    locations: Optional[list] = Field(default=None, description="The cities or country where the person has worked or studied")
+    experiences: Optional[list] = Field(default=None, description="level of experience in a particular field")
+    locations: Optional[list] = Field(default=None, description="The cities or contry where the person has worked or studied")
 
 prompt = ChatPromptTemplate.from_messages(
     [
@@ -46,7 +46,7 @@ prompt = ChatPromptTemplate.from_messages(
             "Only extract relevant information from the text. "
             "If you do not know the value of an attribute asked to extract, "
             "Never return the examples placeholder, try to use it as a reference only."
-            "Return null for the attribute's value.",
+            "return null for the attribute's value.",
         ),
         # Please see the how-to about improving performance with
         # reference examples.
@@ -74,16 +74,13 @@ def clean_text(text):
     return text
 
 # Function to search for job listings based on qualifications and location
-def search_job_listings(qualifications, location = ""):
+def search_job_listings(qualifications, location):
     careerjet_key = '0db138870e02f87744edfc80882408a8'
     userip = '89.114.187.78'  # Example IP
     keywords = ' '.join(qualifications)  # Use qualifications as keywords
     user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0'
 
-    if location != "" and location != None:
-        url = f"http://public.api.careerjet.net/search?keywords={keywords}&location={location}&user_ip={userip}&user_agent={user_agent}&sort=salary"
-    else:
-        url = f"http://public.api.careerjet.net/search?keywords={keywords}&user_ip={userip}&user_agent={user_agent}&sort=salary"
+    url = f"http://public.api.careerjet.net/search?keywords={keywords}&location={location}&user_ip={userip}&user_agent={user_agent}&sort=salary"
 
     response = requests.get(url)
     data = response.json()
@@ -91,53 +88,30 @@ def search_job_listings(qualifications, location = ""):
     return data
 
 def getMeSomeJuicyAnswers(text):
-    results, results_, job_listings = [], [], []
+    results = []
     cv_text = clean_text(text)
-    resultLLM = runnable.invoke({"text": cv_text})
-
-    # Ensure that the result conforms to the expected structure
-    if resultLLM:
-        print("Skills:", resultLLM.skills)
-        print("Experiences:", resultLLM.experiences)
-        print("Locations:", resultLLM.locations)
-        skillsPlus = resultLLM.skills.copy()
-        skillsPlus.extend(resultLLM.experiences)
-
-        clean_locations = []
-        for loc in resultLLM.locations:
-            if is_country_or_location(loc):
-                clean_locations.append(loc)
+    result = runnable.invoke({"text": cv_text})
+    print("Skills:", result.skills)
+    print("Experiences:", result.experiences)
+    print("Locations:", result.locations)
+    #for location in result.locations:
+    #    job_listings = search_job_listings(result.skills, location)
+    #    print(f"Job listings in {location}:")
+    #    
+    #    results = job_listings['jobs']
         
 
-        print(f"clean_locations {clean_locations}|skillsPlus {skillsPlus}\n\n")
-        for skil in skillsPlus:
-            for loc in clean_locations:
-                job_listings = search_job_listings(skil, loc)
+        #for job in job_listings['jobs']:
+        #    results.append([job['title'], job['company'], job['salary'], job['locations']])
+        #    #print(job['title'], "-", job['company'], "-", job['salary'], "-", job['locations'])
+    
+    #for debug purposes - delete later
+    with open("./resultsDump.juson", "w") as json_file:
+        json.dump(results, json_file)
 
-        for list_ in job_listings:
-            print(f"list {list_}")
+    return results
 
-        #for location in resultLLM.locations:
-        #    for skil in skillsPlus:
-        #        job_listings = search_job_listings(skil, location)
-        #        print(f"\nJob listings in {location}:")
-        #    
-        #        results_ = job_listings #['jobs']
-        #        print(f"\n results_ {results_}")
-        #        if job_listings and "jobs" in job_listings:
-        #            pass
-        #            #print(results_)
-#
-        #            #for job in job_listings['jobs']:
-        #            #    results_.append([job['title'], job['company'], job['salary'], job['locations']])
-        #            #    #print(job['title'], "-", job['company'], "-", job['salary'], "-", job['locations'])
 
-    # For debug purposes - delete later
-    #with open("./resultsDump.json", "w") as json_file:
-    #    json.dump(results_.dict(), json_file)  # Save the result as a JSON object
-
-    return results_
-    #return result
 
 # Example text
 text = """
@@ -145,5 +119,4 @@ Dr. John Smith is a senior researcher in Artificial Intelligence at MIT.
 He holds a PhD in Computer Science from Stanford University. 
 Previously, he worked at Google in California.
 """
-
-getMeSomeJuicyAnswers(text)
+#getMeSomeJuicyAnswers(text)
