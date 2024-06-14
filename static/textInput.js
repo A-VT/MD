@@ -23,17 +23,33 @@ document.addEventListener("DOMContentLoaded", function () {
             for (const result of data.results) {
                 // Create new entry
                 const newEntry = document.createElement("div");
-                newEntry.classList.add("jobListing");
 
-                baseSalary = result['salary_min'];
-                intervalSalary = result['salary'];
-                salaryCurrencyCode = result['salary_currency_code'];
-                locations = result['locations'];
-                description = result['description'];
-                addUrl = result['url'];
+                // Create and append title
+                const title = document.createElement("h4");
+                title.textContent = result['title'];
+                newEntry.appendChild(title);
 
-                newEntry.textContent = `Job: ${description}\n`;
+                // Create and append salary and type info
+                const salaryInfo = document.createElement("p");
+                salaryInfo.textContent = `Salary: ${result['salary']} | Currency: ${result['salary_currency_code']} | Type: ${result['salary_type']}`;
+                newEntry.appendChild(salaryInfo);
 
+                // Create and append URL
+                const url = document.createElement("p");
+                url.textContent = `URL: ${result['url']}`;
+                newEntry.appendChild(url);
+
+                // Create and append description
+                const description = document.createElement("p");
+                description.textContent = result['description'];
+                newEntry.appendChild(description);
+
+                // Create and append salary range
+                const salaryRange = document.createElement("p");
+                salaryRange.textContent = `Salary Min-Max: ${result['salary_min']} - ${result['salary_max']}`;
+                newEntry.appendChild(salaryRange);
+
+                // Append the new entry to the responses div
                 responsesDiv.appendChild(newEntry);
             }
 

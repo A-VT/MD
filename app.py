@@ -26,5 +26,9 @@ def handle_input():
 def cv_processing():
     return render_template('CVprocessing.html')
 
+@app.route('/pdf')
+def cv_pdf():
+    return render_template('pdf_.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
