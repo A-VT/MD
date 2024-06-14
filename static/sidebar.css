@@ -8,10 +8,14 @@ body {
     width: 200px;
     background-color: #f4f4f4;
     padding: 15px;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     transition: width 0.3s ease;
     overflow: hidden;
     height: 100vh; /* Stretch sidebar to full viewport height */
+    position: fixed; /* Fix the sidebar position */
+    left: 0; /* Align sidebar to the left */
+    top: 0; /* Align sidebar to the top */
+    z-index: 2; /* Ensure sidebar is above content */
 }
 
 .sidebar.collapsed {
@@ -43,9 +47,11 @@ body {
 }
 
 .content {
-    flex: 1;
+    margin-left: 200px; /* Initial margin to match sidebar width */
     padding: 20px;
     transition: margin-left 0.3s ease;
+    position: relative; /* Ensure content is positioned relative */
+    z-index: 1; /* Ensure content is above sidebar */
 }
 
 .content.collapsed {
@@ -56,12 +62,19 @@ body {
     cursor: pointer;
     position: absolute;
     top: 15px;
-    left: 190px; /* Adjust this left position */
-    transition: left 0.3s ease;
+    right: -30px; /* Adjust this right position */
     font-size: 24px; /* Increase font size */
     padding: 5px 10px; /* Add padding for larger clickable area */
+    background-color: #f4f4f4; /* Match sidebar background */
+    border: none;
+    transition: right 0.3s ease;
+    z-index: 3; /* Ensure toggle button is above sidebar and content */
 }
 
-#toggle-btn.collapsed {
-    left: 20px; /* Adjust this left position */
+#toggle-btn:hover {
+    background-color: #ccc; /* Highlight on hover */
+}
+
+.sidebar.collapsed #toggle-btn {
+    right: 0; /* Adjust this right position when sidebar is collapsed */
 }
