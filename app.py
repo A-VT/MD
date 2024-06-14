@@ -9,7 +9,7 @@ def home():
 
 @app.route('/openInputText')
 def open_input_text():
-    return render_template('openInputText.html')
+    return render_template('new_openInputText.html')
 
 @app.route('/handle_input', methods=['POST'])
 def handle_input():

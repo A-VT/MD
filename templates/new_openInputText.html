@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
+
+    <style>
+        /* Custom CSS styles for the textarea to span the entire page */
+        #inputText {
+            width: 100%; /* Make the textarea width 100% of its container (form) */
+            min-height: 200px; /* Set a minimum height */
+            padding: 10px; /* Add padding for better readability */
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+            resize: vertical; /* Allow both horizontal and vertical resizing of the textarea */
+        }
+        .formText{
+            margin-top:1%;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="/">Home</a>
+        <a href="/openInputText">Open Input Text</a>
+        <a href="/CVprocessing">PDF CV Processing</a>
+    </div>
+    
+    <div id="main">
+        <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span>
+
+        <div class="formText">
+            <form id="inputTextForm" action="/handleText" method="POST">
+                <label for="inputText">Give us some information about your skills, your experience and your location:</label><br>
+                <input type="text" id="inputText" name="inputText" placeholder="These are my qualifications. I am searching for a job in Portugal." required><br><br>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+        <div class="answers"></div>
+        
+    </div>
+
+    <script src="{{ url_for('static', filename='sidebar.js') }}"></script>
+</body>
+</html>
