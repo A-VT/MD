@@ -108,7 +108,6 @@ def getMeSomeJuicyAnswers(text):
             if is_country_or_location(loc):
                 clean_locations.append(loc)
         
-
         print(f"clean_locations {clean_locations}|skillsPlus {skillsPlus}\n\n")
 
         listings = []
@@ -122,35 +121,13 @@ def getMeSomeJuicyAnswers(text):
             if "jobs" in job_listings:
                 listings.append(job_listings["jobs"])
 
-        print(listings)
-
-
         lst_set = set()
         for answer in listings:
             for list_ in answer:
                 res__ = list_['title'] + "_" + list_['company'] + "_" + list_['salary'] + "_" + list_['locations']
                 if res__ not in lst_set:
-                    results_.append([list_['title'], list_['company'], list_['salary'], list_['locations']])
+                    results_.append(list_) #results_.append([list_['title'], list_['company'], list_['salary'], list_['locations']])
                     lst_set.add(res__)
-
-        #for list_ in job_listings:
-        #    if list_ == "jobs":
-        #        print(f"list {list_}")
-
-        #for location in resultLLM.locations:
-        #    for skil in skillsPlus:
-        #        job_listings = search_job_listings(skil, location)
-        #        print(f"\nJob listings in {location}:")
-        #    
-        #        results_ = job_listings #['jobs']
-        #        print(f"\n results_ {results_}")
-        #        if job_listings and "jobs" in job_listings:
-        #            pass
-        #            #print(results_)
-#
-        #            #for job in job_listings['jobs']:
-        #            #    results_.append([job['title'], job['company'], job['salary'], job['locations']])
-        #            #    #print(job['title'], "-", job['company'], "-", job['salary'], "-", job['locations'])
 
     # For debug purposes - delete later
     with open("./resultsDump.json", "w") as json_file:

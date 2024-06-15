@@ -7,13 +7,23 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
 </head>
 <body>
-    <div class="sidebar">
-        {% include 'sidebar.html' %}
+
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="/">Home</a>
+        <a href="/openInputText">Open Input Text</a>
+        <a href="/CVprocessing">PDF CV Processing</a>
     </div>
-    <div class="content">
-        <div id="toggle-btn">☰</div>
-        This is the index page of our app.
+    
+    <div id="main">
+        <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span>
+        <h2>Homepage</h2>
+        <p>Click on the element below to open the side navigation menu, and push this content to the right.</p>
     </div>
+
+
     <script src="{{ url_for('static', filename='sidebar.js') }}"></script>
 </body>
 </html>
+
+

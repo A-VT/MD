@@ -3,16 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Path Input</title>
+    <title>Text Process</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
 
     <style>
-        #filePath {
+        /* Custom CSS styles for the textarea to span the entire page */
+        #inputText {
             width: 100%;
+            min-height: 100px;
             padding: 10px;
             box-sizing: border-box;
+            resize: vertical;
+            vertical-align: top; /* Align the text to start at the top */
         }
-        .formFilePath {
+        .formText {
             margin-top: 1%;
         }
         .result {
@@ -34,34 +38,34 @@
     <div id="main">
         <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span>
 
-        <div class="formFilePath">
-            <form id="filePathForm" action="/handleFilePath" method="POST">
-                <label for="filePath">Enter the path to your file:</label><br>
-                <input type="text" id="filePath" name="filePath" placeholder="C:\path\to\your\file.txt" required><br><br>
+        <div class="formText">
+            <form id="inputTextForm" action="/handleText" method="POST">
+                <label for="inputText">Give us some information about your skills, your experience and your location:</label><br>
+                <textarea id="inputText" name="inputText" placeholder="These are my qualifications. I am searching for a job in Portugal." required></textarea><br><br>
                 <button type="submit">Submit</button>
             </form>
         </div>
 
-        <div class="fileResponse"></div>
+        <div class="textResponse"></div>
     </div>       
     
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const form = document.getElementById('filePathForm');
+            const form = document.getElementById('inputTextForm');
             form.addEventListener('submit', function(event) {
                 event.preventDefault();  // Prevent the form from submitting via browser
 
                 // Get the form data
                 const formData = new FormData(form);
 
-                // Reference to fileResponseDiv
-                const fileResponseDiv = document.querySelector('.fileResponse');
+                // Reference to textResponseDiv
+                const textResponseDiv = document.querySelector('.textResponse');
 
                 // Show loading message or indication
-                fileResponseDiv.innerHTML = '<p>Loading...</p>';
+                textResponseDiv.innerHTML = '<p>Loading...</p>';
 
                 // Make a POST request using fetch API
-                fetch('/handleFilePath', {
+                fetch('/handleText', {
                     method: 'POST',
                     body: formData
                 })
@@ -69,7 +73,7 @@
                 .then(data => {
                     if (data.status === 'success') {
                         // Clear the previous content
-                        fileResponseDiv.innerHTML = '';
+                        textResponseDiv.innerHTML = '';
 
                         // Iterate over the results and create HTML elements for each item
                         data.results.forEach(result => {
@@ -113,16 +117,16 @@
                             url.appendChild(link);
                             resultDiv.appendChild(url);
 
-                            // Append the resultDiv to fileResponseDiv
-                            fileResponseDiv.appendChild(resultDiv);
+                            // Append the resultDiv to textResponseDiv
+                            textResponseDiv.appendChild(resultDiv);
                         });
                     } else {
-                        fileResponseDiv.innerHTML = '<p>There was an error processing your request.</p>';
+                        textResponseDiv.innerHTML = '<p>There was an error processing your request.</p>';
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    fileResponseDiv.innerHTML = '<p>There was an error processing your request.</p>';
+                    textResponseDiv.innerHTML = '<p>There was an error processing your request.</p>';
                 });
             });
         });

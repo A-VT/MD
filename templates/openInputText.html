@@ -8,27 +8,21 @@
     <title>Open Input Text</title>
 </head>
 <body>
-    <div class="sidebar">
+    <div class="sidebar" id="sidebar">
         {% include 'sidebar.html' %}
+        <div id="toggle-btn">☰</div>
     </div>
     <div class="content">
-        <div id="toggle-btn">☰</div>
         <h1>Open Input Text</h1>
-
         <b></b><div id="messageServer">Let's get you that dream job!</div></b>
         <div id="responses"></div>
-
         <div id="input-container">
             <textarea id="input-text" placeholder="Enter text"></textarea>
             <button id="send-button">➡️</button>
         </div>
-
     </div>
 
     <script src="{{ url_for('static', filename='sidebar.js') }}"></script>
     <script src="{{ url_for('static', filename='textInput.js') }}"></script>
-
-
-    
 </body>
 </html>

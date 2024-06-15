@@ -1,11 +1,9 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const sidebar = document.querySelector(".sidebar");
-    const content = document.querySelector(".content");
-    const toggleBtn = document.getElementById("toggle-btn");
+function openNav() {
+  document.getElementById("mySidenav").style.width = "250px";
+  document.getElementById("main").style.marginLeft = "250px";
+}
 
-    toggleBtn.addEventListener("click", function () {
-        sidebar.classList.toggle("collapsed");
-        content.classList.toggle("collapsed");
-        toggleBtn.classList.toggle("collapsed");
-    });
-});
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+  document.getElementById("main").style.marginLeft= "0";
+}

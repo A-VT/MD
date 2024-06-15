@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Upload</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='inputText.css') }}">
+    <style>
+        .dropzone {
+            border: 2px dashed #0087F7;
+            border-radius: 5px;
+            background: white;
+            padding: 50px;
+            width: 100%;
+            height: 300px;
+        }
+
+        .dropzone .dz-message {
+            font-weight: 400;
+            text-align: center;
+            margin: 2em 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        #file-path {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            {% include 'sidebar.html' %}
+        </div>
+        <div class="content">
+
+            <h1>Upload PDF</h1>
+            <form id="pdfForm" method="post" action="/upload">
+                <div class="dropzone" id="pdfDropzone">
+                    <div class="dz-message" data-dz-message><span>Drop PDF here or click to upload</span></div>
+                </div>
+                <hr>
+                <h2>Or</h2>
+                <hr>
+                <input type="file" id="fileInput" accept="application/pdf">
+                <p id="file-path"></p>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.js"></script>
+    <script>
+        // Dropzone configuration
+        Dropzone.autoDiscover = false;
+        const pdfDropzone = new Dropzone("#pdfDropzone", {
+            url: "/upload",
+            paramName: "file", // The name that will be used to transfer the file
+            maxFilesize: 5, // MB
+            acceptedFiles: "application/pdf",
+            autoProcessQueue: false,
+            init: function () {
+                this.on("addedfile", function (file) {
+                    document.getElementById("fileInput").files = this.getAcceptedFiles();
+                    document.getElementById("file-path").textContent = "Selected file: " + file.name;
+                });
+            }
+        });
+
+        // Handle file input
+        document.getElementById("fileInput").addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            if (file && file.type === "application/pdf") {
+                document.getElementById("file-path").textContent = "Selected file: " + file.name;
+                pdfDropzone.removeAllFiles();
+                pdfDropzone.addFile(file);
+            } else {
+                console.error("Please upload a valid PDF file.");
+            }
+        });
+
+        // Handle form submission
+        document.getElementById("pdfForm").addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent the default form submission
+            const files = document.getElementById("fileInput").files;
+            if (files.length > 0) {
+                const formData = new FormData();
+                formData.append("file", files[0]);
+
+                fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                }).then(response => response.json()).then(data => {
+                    console.log("File uploaded successfully.");
+                }).catch(error => {
+                    console.error('Error:', error);
+                });
+            } else {
+                alert("Please select a PDF file.");
+            }
+        });
+    </script>
+</body>
+
+</html>
