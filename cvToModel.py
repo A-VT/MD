@@ -22,7 +22,7 @@ def getAnswersFromCV(pdf_path):
     cv_text = extract_text_from_pdf(pdf_path)
     preprocessed_text = preprocess_text(cv_text)
     print(preprocessed_text)
-    return preprocess_text
+    return preprocessed_text
     #getMeSomeJuicyAnswers(preprocessed_text)
 
 #pdf_path = 'cvs/cv.pdf'
