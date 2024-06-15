@@ -35,8 +35,8 @@ class Person(BaseModel):
     # Having a good description can help improve extraction results.
     name: Optional[str] = Field(default=None, description="The name of the person")
     skills: Optional[list] = Field(default=None, description="The hard/soft skills acquired by the candidate")
-    experiences: Optional[list] = Field(default=None, description="Level of experience in a particular field")
-    locations: Optional[list] = Field(default=None, description="The cities or country where the person has worked or studied")
+    experiences: Optional[list] = Field(default=None, description="level of experience in a particular field, so any job/company or academic experience.")
+    locations: Optional[list] = Field(default=None, description="The geografical location of where the person has worked or studied, any country, city, or region, dont give any university or company.")
 
 prompt = ChatPromptTemplate.from_messages(
     [
@@ -159,11 +159,10 @@ def getMeSomeJuicyAnswers(text):
     return results_
     #return result
 
-# Example text
-text = """
-Dr. John Smith is a senior researcher in Artificial Intelligence at MIT. 
-He holds a PhD in Computer Science from Stanford University. 
-Previously, he worked at Google in California.
-"""
+def extract_text_from_pdf(pdf_path):
+    text = ""
+    with fitz.open(pdf_path) as doc:
+        for page in doc:
+            text += page.get_text()
+    return text
 
-getMeSomeJuicyAnswers(text)
