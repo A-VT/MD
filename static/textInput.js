@@ -1,62 +1,80 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const sendButton = document.getElementById("send-button");
-    const inputText = document.getElementById("input-text");
-    const responsesDiv = document.getElementById("responses");
-    const messageServerDiv = document.getElementById("messageServer");
+document.addEventListener("DOMContentLoaded", function() {
+    const form = document.getElementById('inputTextForm');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();  // Prevent the form from submitting via browser
 
-    sendButton.addEventListener("click", function () {
-        const text = inputText.value;
-        fetch('/handle_input', {
+        // Get the form data
+        const formData = new FormData(form);
+
+        // Reference to textResponseDiv
+        const textResponseDiv = document.querySelector('.textResponse');
+
+        // Show loading message or indication
+        textResponseDiv.innerHTML = '<p>Loading...</p>';
+
+        // Make a POST request using fetch API
+        fetch('/handleText', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ text: text }),
-        }).then(response => {
-            return response.json();
-        }).then(data => {
-            // Clear previous entries
-            responsesDiv.innerHTML = "";
-            messageServerDiv.textContent = "Based on the data you gave us we found these job offers available:\n";
+            body: formData
+        })
+        .then(response => response.json())  // Expect a JSON response
+        .then(data => {
+            if (data.status === 'success') {
+                // Clear the previous content
+                textResponseDiv.innerHTML = '';
 
-            // Process results through a for loop
-            for (const result of data.results) {
-                // Create new entry
-                const newEntry = document.createElement("div");
+                // Iterate over the results and create HTML elements for each item
+                data.results.forEach(result => {
+                    const resultDiv = document.createElement('div');
+                    resultDiv.classList.add('result');
 
-                // Create and append title
-                const title = document.createElement("h4");
-                title.textContent = result['title'];
-                newEntry.appendChild(title);
+                    // Create and append elements for each key in the result
+                    const title = document.createElement('h3');
+                    title.textContent = result.title;
+                    resultDiv.appendChild(title);
 
-                // Create and append salary and type info
-                const salaryInfo = document.createElement("p");
-                salaryInfo.textContent = `Salary: ${result['salary']} | Currency: ${result['salary_currency_code']} | Type: ${result['salary_type']}`;
-                newEntry.appendChild(salaryInfo);
+                    const company = document.createElement('p');
+                    company.textContent = `Company: ${result.company}`;
+                    resultDiv.appendChild(company);
 
-                // Create and append URL
-                const url = document.createElement("p");
-                url.textContent = `URL: ${result['url']}`;
-                newEntry.appendChild(url);
+                    const date = document.createElement('p');
+                    date.textContent = `Date: ${result.date}`;
+                    resultDiv.appendChild(date);
 
-                // Create and append description
-                const description = document.createElement("p");
-                description.textContent = result['description'];
-                newEntry.appendChild(description);
+                    const description = document.createElement('p');
+                    description.textContent = `Description: ${result.description}`;
+                    resultDiv.appendChild(description);
 
-                // Create and append salary range
-                const salaryRange = document.createElement("p");
-                salaryRange.textContent = `Salary Min-Max: ${result['salary_min']} - ${result['salary_max']}`;
-                newEntry.appendChild(salaryRange);
+                    const locations = document.createElement('p');
+                    locations.textContent = `Locations: ${result.locations}`;
+                    resultDiv.appendChild(locations);
 
-                // Append the new entry to the responses div
-                responsesDiv.appendChild(newEntry);
+                    const salary = document.createElement('p');
+                    salary.textContent = `Salary: ${result.salary}`;
+                    resultDiv.appendChild(salary);
+
+                    const site = document.createElement('p');
+                    site.textContent = `Site: ${result.site}`;
+                    resultDiv.appendChild(site);
+
+                    const url = document.createElement('p');
+                    const link = document.createElement('a');
+                    link.href = result.url;
+                    link.textContent = 'Job Link';
+                    link.target = '_blank';
+                    url.appendChild(link);
+                    resultDiv.appendChild(url);
+
+                    // Append the resultDiv to textResponseDiv
+                    textResponseDiv.appendChild(resultDiv);
+                });
+            } else {
+                textResponseDiv.innerHTML = '<p>There was an error processing your request.</p>';
             }
-
-            // Clear input text
-            inputText.value = "";
-        }).catch(error => {
+        })
+        .catch(error => {
             console.error('Error:', error);
+            textResponseDiv.innerHTML = '<p>There was an error processing your request.</p>';
         });
     });
 });

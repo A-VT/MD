@@ -1,6 +1,6 @@
 import fitz  # PyMuPDF
 import re
-from MD.old_backend import getMeSomeJuicyAnswers
+#from MD.old_backend import getMeSomeJuicyAnswers
 
 def extract_text_from_pdf(pdf_path):
     text = ""
@@ -22,6 +22,8 @@ def getAnswersFromCV(pdf_path):
     cv_text = extract_text_from_pdf(pdf_path)
     preprocessed_text = preprocess_text(cv_text)
     print(preprocessed_text)
-    getMeSomeJuicyAnswers(preprocessed_text)
-pdf_path = 'cvs/cv.pdf'
-getAnswersFromCV(pdf_path)
+    return preprocess_text
+    #getMeSomeJuicyAnswers(preprocessed_text)
+
+#pdf_path = 'cvs/cv.pdf'
+#getAnswersFromCV(pdf_path)

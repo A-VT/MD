@@ -3,18 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Path Input</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='sidebar.css') }}">
-    <title>Open Input Text</title>
+
+    <style>
+        #filePath {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .formFilePath {
+            margin-top: 1%;
+        }
+        .result {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-    <div class="sidebar">
-        {% include 'sidebar.html' %}
+
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="/">Home</a>
+        <a href="/openInputText">Open Input Text</a>
+        <a href="/CVprocessing">PDF CV Processing</a>
     </div>
-    <div class="content">
-        <div id="toggle-btn">☰</div>
-        <h1>CV Processing Page</h1>
-        <p>This is the CV Processing page.</p>
-    </div>
-    <script src="{{ url_for('static', filename='sidebar.js') }}"></script>
+    
+    <div id="main">
+        <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span>
+
+        <div class="formFilePath">
+            <form id="filePathForm" action="/handleFilePath" method="POST">
+                <label for="filePath">Enter the path to your file:</label><br>
+                <input type="text" id="filePath" name="filePath" placeholder="C:\path\to\your\file.txt" required><br><br>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+
+        <div class="fileResponse"></div>
+    </div>       
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById('filePathForm');
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();  // Prevent the form from submitting via browser
+
+                // Get the form data
+                const formData = new FormData(form);
+
+                // Reference to fileResponseDiv
+                const fileResponseDiv = document.querySelector('.fileResponse');
+
+                // Show loading message or indication
+                fileResponseDiv.innerHTML = '<p>Loading...</p>';
+
+                // Make a POST request using fetch API
+                fetch('/handleFilePath', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())  // Expect a JSON response
+                .then(data => {
+                    if (data.status === 'success') {
+                        // Clear the previous content
+                        fileResponseDiv.innerHTML = '';
+
+                        // Iterate over the results and create HTML elements for each item
+                        data.results.forEach(result => {
+                            const resultDiv = document.createElement('div');
+                            resultDiv.classList.add('result');
+
+                            // Create and append elements for each key in the result
+                            const title = document.createElement('h3');
+                            title.textContent = result.title;
+                            resultDiv.appendChild(title);
+
+                            const company = document.createElement('p');
+                            company.textContent = `Company: ${result.company}`;
+                            resultDiv.appendChild(company);
+
+                            const date = document.createElement('p');
+                            date.textContent = `Date: ${result.date}`;
+                            resultDiv.appendChild(date);
+
+                            const description = document.createElement('p');
+                            description.textContent = `Description: ${result.description}`;
+                            resultDiv.appendChild(description);
+
+                            const locations = document.createElement('p');
+                            locations.textContent = `Locations: ${result.locations}`;
+                            resultDiv.appendChild(locations);
+
+                            const salary = document.createElement('p');
+                            salary.textContent = `Salary: ${result.salary}`;
+                            resultDiv.appendChild(salary);
+
+                            const site = document.createElement('p');
+                            site.textContent = `Site: ${result.site}`;
+                            resultDiv.appendChild(site);
+
+                            const url = document.createElement('p');
+                            const link = document.createElement('a');
+                            link.href = result.url;
+                            link.textContent = 'Job Link';
+                            link.target = '_blank';
+                            url.appendChild(link);
+                            resultDiv.appendChild(url);
+
+                            // Append the resultDiv to fileResponseDiv
+                            fileResponseDiv.appendChild(resultDiv);
+                        });
+                    } else {
+                        fileResponseDiv.innerHTML = '<p>There was an error processing your request.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    fileResponseDiv.innerHTML = '<p>There was an error processing your request.</p>';
+                });
+            });
+        });
+    </script>
 </body>
 </html>
