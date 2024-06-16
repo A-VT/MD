@@ -9,6 +9,7 @@ This repository contains a skill extraction project developed for the MD course.
 - **app.py**: Manages the routing and serves as the entry point for the frontend application.
 - **templates/**: Directory containing HTML templates for the frontend.
 - **static/**: Directory containing static files (CSS, JavaScript, images) for the frontend.
+- **apresentacoes/**: Directory containing the slides of past presentations.
 
 ## Getting Started
 
